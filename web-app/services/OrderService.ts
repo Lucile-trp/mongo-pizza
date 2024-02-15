@@ -58,4 +58,41 @@ export class OrderService {
       },
     ]);
   }
+
+  async getMediumSizeQuantityOrder() {
+    const db = this.client.db("pizzas_orders_db");
+    const collection = db.collection("orders");
+
+    return collection.aggregate([
+      {
+        $match: { size: "medium" },
+      },
+      {
+        $group: {
+          _id: "$name",
+          totalQuantityMedium: { $sum: "$quantity" },
+        },
+      },
+    ]);
+  }
+
+  async getAverageNumberOfPizzaSold() {
+    const db = this.client.db("pizzas_orders_db");
+    const collection = db.collection("orders");
+
+    return collection.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalPizzas: { $sum: "$quantity" },
+          totalOrders: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          moyenne: { $divide: ["$totalPizzas", "$totalOrders"] },
+        },
+      },
+    ]);
+  }
 }
