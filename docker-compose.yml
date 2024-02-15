@@ -8,6 +8,8 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - mongodb-data:/data/db
 
   mongo-express:
     image: mongo-express:1.0.2
@@ -26,3 +28,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
+
+volumes:
+  mongodb-data:
