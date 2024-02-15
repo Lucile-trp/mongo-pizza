@@ -95,4 +95,22 @@ export class OrderService {
       },
     ]);
   }
+
+  async getMenu() {
+    const db = this.client.db("pizzas_orders_db");
+    const collection = db.collection("menu");
+
+    return collection
+      .aggregate([
+        {
+          $project: {
+            _id: 0,
+            name: 1,
+            price: 1,
+            size: 1,
+          },
+        },
+      ])
+      .toArray();
+  }
 }
