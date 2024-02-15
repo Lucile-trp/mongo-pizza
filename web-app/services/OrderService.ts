@@ -24,4 +24,38 @@ export class OrderService {
     const collection = db.collection("orders");
     return collection.find({ name: pizza }).toArray();
   }
+
+  async getTotalPizzaOrder() {
+    const db = this.client.db("pizzas_orders_db");
+    const collection = db.collection("orders");
+
+    return collection
+      .aggregate([
+        {
+          $group: {
+            _id: "$name",
+            total: { $sum: 1 },
+          },
+        },
+      ])
+      .toArray();
+  }
+
+  async getTotalPrice() {
+    const db = this.client.db("pizzas_orders_db");
+    const collection = db.collection("orders");
+
+    return collection.aggregate([
+      {
+        $project: {
+          _id: null,
+          price: 1,
+          quantity: 1,
+          totalPizzaSold: {
+            $multiply: ["$price", "$quantity"],
+          },
+        },
+      },
+    ]);
+  }
 }
