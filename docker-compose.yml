@@ -26,6 +26,19 @@ services:
     networks:
       - pizza_network
 
+  pizzas_customers_db:
+    image: mongo:7.0.5
+    container_name: pizzas_customers_db
+    ports:
+      - "27019:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - ./data/pizza_customers_db:/data/db
+    networks:
+      - pizza_network
+
   pizza_menu_api:
     container_name: pizzas_menu_api
     build:
