@@ -39,6 +39,18 @@ services:
     networks:
       - pizza_network
 
+  pizza_customers_api:
+    container_name: pizzas_customers_api
+    build:
+      context: ./pizzas_customers_api
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3002"
+    depends_on:
+      - pizzas_customers_db
+    networks:
+      - pizza_network
+
   pizza_menu_api:
     container_name: pizzas_menu_api
     build:

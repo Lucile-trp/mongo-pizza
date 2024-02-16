@@ -3,6 +3,9 @@
 - Lucile TRIPIER
 - Grégory LEBLOND
 
+TP07 : DONE
+TP08 : commencé
+
 ## Questions partie 3
 
 a. Quel est le montant total des commandes de pizzas (tous formats confondus)
