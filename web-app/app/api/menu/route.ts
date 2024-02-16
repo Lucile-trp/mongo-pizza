@@ -6,6 +6,17 @@ export async function GET() {
   const client = await connectToDatabase();
   const service = new OrderService(client);
   const data = await service.getMenu();
+
+  let tmp = {};
+  for (const a of data) {
+    tmp = {
+      ...a,
+      id: crypto.randomUUID(),
+    };
+
+    data[data.indexOf(a)] = tmp;
+  }
+  console.log(data, "data");
   const fileName: string = "menu.json";
 
   //Create a json file inside the public folder with the menu data

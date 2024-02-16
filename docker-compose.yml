@@ -1,25 +1,42 @@
 version: "3"
 services:
-  mongodb:
+  pizza_orders_db:
     image: mongo:7.0.5
-    container_name: mongodb
+    container_name: pizza_orders_db
     ports:
       - "27017:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
     volumes:
-      - mongodb-data:/data/db
+      - ./data/pizza_orders_db:/data/db
+    networks:
+      - pizza_network
 
-  mongo-express:
-    image: mongo-express:1.0.2
-    container_name: mongo-express
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: example
-      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongodb:27017/
+  pizzas_menu_db:
+    image: mongo:7.0.5
+    container_name: pizzas_menu_db
     ports:
-      - "8081:8081"
+      - "27018:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - ./data/pizza_menu_db:/data/db
+    networks:
+      - pizza_network
+
+  pizza_menu_api:
+    container_name: pizzas_menu_api
+    build:
+      context: ./pizzas_menu_api
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    depends_on:
+      - pizzas_menu_db
+    networks:
+      - pizza_network
 
   app:
     container_name: webapp
@@ -28,6 +45,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
+    networks:
+      - pizza_network
 
-volumes:
-  mongodb-data:
+networks:
+  pizza_network:
+    driver: bridge
