@@ -1,19 +1,23 @@
 import { connectToDatabase } from "@/libs/MongoClient";
 import { OrderService } from "@/services/OrderService";
-import { NextResponse } from "next/server";
 import fs from "fs";
 
-export async function GET(response: NextResponse) {
+export async function GET() {
   const client = await connectToDatabase();
   const service = new OrderService(client);
   const data = await service.getMenu();
+  const fileName: string = "menu.json";
 
   //Create a json file inside the public folder with the menu data
   const menu = JSON.stringify(data);
   const publicFolderPath = process.cwd() + "/public";
-  fs.writeFileSync(publicFolderPath + "/menu.json", menu);
+  fs.writeFileSync(publicFolderPath + fileName, menu);
 
-  response.headers.set("Content-Disposition", "attachment; filename=menu.json");
-
-  return response.json();
+  //Return the file as a response
+  return new Response(menu, {
+    headers: {
+      "Content-Type": "application/json",
+      "Content-Disposition": 'attachment; filename="menu.json"',
+    },
+  });
 }

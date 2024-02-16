@@ -98,7 +98,7 @@ export class OrderService {
 
   async getMenu() {
     const db = this.client.db("pizzas_orders_db");
-    const collection = db.collection("menu");
+    const collection = db.collection("orders");
 
     return collection
       .aggregate([

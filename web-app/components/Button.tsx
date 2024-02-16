@@ -31,6 +31,16 @@ export const Button = () => {
     });
   }
 
+  async function downloadMenu() {
+    await fetch("/api/menu", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Content-Disposition": 'attachment; filename="menu.json"',
+      },
+    });
+  }
+
   return (
     <div>
       <button
@@ -80,6 +90,13 @@ export const Button = () => {
           Choisir ma taille
         </button>
       </form>
+      <a
+        href="/api/menu"
+        download={true}
+        className="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg mt-4"
+      >
+        Télécharger le menu
+      </a>
     </div>
   );
 };
